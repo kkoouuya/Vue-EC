@@ -7,11 +7,12 @@ services:
       context: ./project/frontend
       dockerfile: Dockerfile
     ports:
-      - 80:8080
+      - 8080:8080
     restart: always
     tty: true
     volumes:
-      - ./app/my-vue-app:/app
+      - ./project/frontend:/usr/src/
+      - /usr/src/app/node_modules
     
   backend:
     container_name: backend
@@ -19,12 +20,12 @@ services:
       context: ./project/backend
       dockerfile: Dockerfile
     command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
+    volumes:
+      - ./project/backend:/usr/src/
     ports:
       - 8004:8000
     restart: always
     tty: true
-    volumes:
-      - ./app/python:/app
   
   db:
     image: mysql:8.0
